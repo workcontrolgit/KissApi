@@ -8,37 +8,38 @@ using GenFu;
 
 namespace Kiss.Infrastructure.Repository
 {
-    public class PersonRepository : IPersonRepository
+    public class IncidentReportRepository : IIncidentReportRepository
     {
-        private readonly IGenFuRepository<Person> _personGeneratorService;
-        private readonly IGenFuRepository<Contact> _contactGeneratorService;
+        private readonly IBogusRepository<IncidentReport> _incidentReportGeneratorService;
+        private readonly IBogusRepository<Contact> _contactGeneratorService;
 
-        public PersonRepository(IGenFuRepository<Person> personGeneratorService, IGenFuRepository<Contact> contactGeneratorService)
+        public IncidentReportRepository(IBogusRepository<IncidentReport> incidentReportGeneratorService, IBogusRepository<Contact> contactGeneratorService)
         {
-            _personGeneratorService = personGeneratorService;
+            _incidentReportGeneratorService = incidentReportGeneratorService;
             _contactGeneratorService = contactGeneratorService;
         }
-        public async Task<IEnumerable<Person>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<IncidentReport>> GetAllAsync(int pageNumber, int pageSize)
         {
             var contacts = await _contactGeneratorService.Collection(100);
 
             //Example of custom data
-            GenFu.GenFu.Configure<Person>()
-                .Fill(p => p.EmergencyContact)
+            GenFu.GenFu.Configure<IncidentReport>()
+                .Fill(p => p.ReportedBy)
                 .WithRandom(contacts)
-                .Fill(p => p.NumberOfKids)
-                .WithinRange(1, 25);
-            IEnumerable<Person> result = await _personGeneratorService.Collection(100);
+;
+            IEnumerable<IncidentReport> result = await _incidentReportGeneratorService.Collection(100);
+
+            
             return result.Skip((pageNumber - 1) * pageSize).Take(pageSize); 
         }
 
-        public async Task<Person> GetByIdAsync(Guid id)
+        public async Task<IncidentReport> GetByIdAsync(Guid id)
         {
             throw await Task.Run(() => new NotImplementedException());
         }
 
 
-        public async Task<Guid> AddAsync(Person entity)
+        public async Task<Guid> AddAsync(IncidentReport entity)
         {
             throw await Task.Run(() => new NotImplementedException());
         }
@@ -49,7 +50,7 @@ namespace Kiss.Infrastructure.Repository
         }
 
 
-        public async Task<int> UpdateAsync(Person entity)
+        public async Task<int> UpdateAsync(IncidentReport entity)
         {
             throw await Task.Run(() => new NotImplementedException());
 

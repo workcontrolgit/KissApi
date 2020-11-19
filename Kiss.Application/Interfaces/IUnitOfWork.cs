@@ -4,5 +4,9 @@
     {
         IProductRepository Products { get; }
         IPersonRepository Persons { get; }
+
+        IIncidentReportRepository IncidentReport { get; }
+
+        
     }
 }

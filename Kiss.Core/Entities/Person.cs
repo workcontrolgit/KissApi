@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kiss.Core.Entities
 {
@@ -15,6 +13,7 @@ namespace Kiss.Core.Entities
         public int NumberOfKids { get; set; }
         public DateTime AddedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public Contact EmergencyContact { get; set; }
 
     }
 }
