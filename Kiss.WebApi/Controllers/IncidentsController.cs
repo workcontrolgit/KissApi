@@ -6,16 +6,16 @@ namespace Kiss.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class IncidentReportController : ControllerBase
+    public class IncidentsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public IncidentReportController(IUnitOfWork unitOfWork)
+        public IncidentsController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
         /// <summary>
-        /// SELECT records from mock library GenFu
+        /// SELECT records from mock library Bogus
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageNumber, int pageSize)

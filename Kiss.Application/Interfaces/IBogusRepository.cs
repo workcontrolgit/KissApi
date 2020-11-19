@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Kiss.Application.Interfaces
@@ -25,5 +23,6 @@ namespace Kiss.Application.Interfaces
         /// </summary>
         /// <returns>T with data based on the properties in T</returns>
         Task<T> Instance();
+
     }
 }

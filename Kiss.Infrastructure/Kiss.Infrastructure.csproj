@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repository\BogusRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Bogus" Version="31.0.3" />
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="GenFu" Version="1.6.0" />

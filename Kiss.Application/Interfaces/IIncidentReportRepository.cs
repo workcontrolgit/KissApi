@@ -2,7 +2,7 @@
 
 namespace Kiss.Application.Interfaces
 {
-    public interface IIncidentReportRepository : IGenericRepository<IncidentReport>
+    public interface IIncidentReportRepository : IGenericRepository<Incident>
     {
     }
 }

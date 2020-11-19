@@ -3,9 +3,9 @@ using System;
 
 namespace Kiss.Core.Entities
 {
-    public class IncidentReport
+    public class Incident
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Description { get; set; }
         public DateTime ReportedOn { get; set; }
         public Contact ReportedBy { get; set; }

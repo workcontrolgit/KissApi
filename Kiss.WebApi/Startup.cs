@@ -33,7 +33,7 @@ namespace Kiss.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Sales - WebApi",
+                    Title = "Kiss - WebApi",
                 });
             });
         }

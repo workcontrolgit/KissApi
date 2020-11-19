@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Sales.Api": {
+    "Kiss.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Kiss.Application.Interfaces;
+﻿using Kiss.Application.Interfaces;
 using Kiss.Core.Entities;
 using SqlKata.Execution;
 using System;
@@ -10,25 +9,23 @@ namespace Kiss.Infrastructure.Repository
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly IConfiguration _configuration;
-        private readonly QueryFactory _db;
+        private readonly QueryFactory _queryFactory;
 
-        public ProductRepository(IConfiguration configuration, QueryFactory db)
+        public ProductRepository(QueryFactory queryFactory)
         {
-            _configuration = configuration;
-            _db = db;
+            _queryFactory = queryFactory;
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var result = await _db.Query("Products").ForPage(pageNumber, pageSize).GetAsync<Product>();
+            var result = await _queryFactory.Query("Products").ForPage(pageNumber, pageSize).GetAsync<Product>();
             return result;
 
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            var result = await _db.Query("Products").Where("Id", "=", id)
+            var result = await _queryFactory.Query("Products").Where("Id", "=", id)
                 .FirstOrDefaultAsync<Product>();
             return result;
         }
@@ -39,7 +36,7 @@ namespace Kiss.Infrastructure.Repository
             entity.AddedOn = DateTime.Now;
             entity.Id = await SetPrimaryKey(entity.Id);
 
-            var affectedRows = await _db.Query("Products").InsertAsync(new
+            var affectedRows = await _queryFactory.Query("Products").InsertAsync(new
             {
                 Id = entity.Id,
                 Name = entity.Name,
@@ -61,7 +58,7 @@ namespace Kiss.Infrastructure.Repository
         public async Task<int> DeleteAsync(Guid id)
         {
 
-            var affectedRows = await _db.Query("Products").Where("Id", "=", id).DeleteAsync();
+            var affectedRows = await _queryFactory.Query("Products").Where("Id", "=", id).DeleteAsync();
             return affectedRows;
 
         }
@@ -71,7 +68,7 @@ namespace Kiss.Infrastructure.Repository
         {
             entity.ModifiedOn = DateTime.Now;
 
-            var affectedRows = await _db.Query("Products").Where("Id", entity.Id).UpdateAsync(new
+            var affectedRows = await _queryFactory.Query("Products").Where("Id", entity.Id).UpdateAsync(new
             {
                 Name = entity.Name,
                 Description = entity.Description,
@@ -113,7 +110,7 @@ namespace Kiss.Infrastructure.Repository
         /// </summary>
         private async Task<bool> IsUsedPrimaryKey(Guid Id)
         {
-            var result = await _db.Query("Products").Where("Id", "=", Id)
+            var result = await _queryFactory.Query("Products").Where("Id", "=", Id)
                 .FirstOrDefaultAsync<Product>();
 
             return result != null;

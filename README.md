@@ -17,7 +17,7 @@ The tech stack includes the following
 
 Instructions to run the project
 1.  Clone the repo
-2.  Open the SalesApi.sln with Visual Studio 2019
+2.  Open the KissApi.sln with Visual Studio 2019
 3.  Create database and table using the db_script.sql (find in the solution root foler)
 4.  Run the solution
 

@@ -37,6 +37,12 @@ namespace Kiss.Infrastructure.Repository
         {
             return await Task.Run(() => new Faker<T>());
         }
+        public async Task<Faker> Initialize()
+        {
+            return await Task.Run(() => new Faker());
+        }
+
+
     }
 
 }

@@ -16,7 +16,7 @@ namespace Kiss.Infrastructure
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IPersonRepository, PersonRepository>();
-            services.AddTransient<IIncidentReportRepository, IncidentReportRepository>();
+            services.AddTransient<IIncidentReportRepository, IncidentRepository>();
 
             
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -34,7 +34,7 @@ namespace Kiss.Infrastructure
             //GenFu DI Container https://github.com/MisterJames/GenFu
             services.AddSingleton(typeof(IGenFuRepository<>), typeof(GenFuRepository<>));
             //Bogus DI Container https://github.com/bchavez/Bogus
-            services.AddSingleton(typeof(IBogusRepository<>), typeof(BogusRepository<>));
+            //services.AddSingleton(typeof(IBogusRepository<>), typeof(BogusRepository<>));
         }
     }
 }

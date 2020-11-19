@@ -1,11 +1,11 @@
--- 1.Create database SalesDB
-CREATE DATABASE SalesDB
+-- 1.Create database KissApiDB
+CREATE DATABASE KissApiDB
 GO
-USE SalesDB
+USE KissApiDB
 GO
 -- 2. Create table Products 
 CREATE TABLE [dbo].[Products](
-	[Id] [int] [uniqueidentifier] ROWGUIDCOL NOT NULLL,
+	[Id] [uniqueidentifier] ROWGUIDCOL NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[Barcode] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](max) NOT NULL,
