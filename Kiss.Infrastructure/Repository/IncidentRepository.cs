@@ -11,14 +11,6 @@ namespace Kiss.Infrastructure.Repository
 {
     public class IncidentRepository : IIncidentReportRepository
     {
-        //private readonly IBogusRepository<IncidentReport> _incidentReportGeneratorService;
-        //private readonly IBogusRepository<Contact> _contactGeneratorService;
-
-        //public IncidentReportRepository(IBogusRepository<IncidentReport> incidentReportGeneratorService, IBogusRepository<Contact> contactGeneratorService)
-        //{
-        //    _incidentReportGeneratorService = incidentReportGeneratorService;
-        //    _contactGeneratorService = contactGeneratorService;
-        //}
         public async Task<IEnumerable<Incident>> GetAllAsync(int pageNumber, int pageSize)
         {
 
