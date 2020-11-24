@@ -4,11 +4,15 @@ using Kiss.Application.Parameters;
 using Kiss.Core.Entities;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Kiss.Api.Controllers
+namespace Kiss.Api.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
+    //[Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
