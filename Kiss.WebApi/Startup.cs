@@ -8,6 +8,7 @@ using Kiss.Infrastructure;
 using System;
 using System.IO;
 using System.Reflection;
+using Kiss.Api.Extensions;
 
 namespace Kiss.WebApi
 {
@@ -25,17 +26,20 @@ namespace Kiss.WebApi
         {
             services.AddInfrastructure(Configuration);
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                var xfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xpath = Path.Combine(AppContext.BaseDirectory, xfile);
-                c.IncludeXmlComments(xpath);
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Kiss - WebApi",
-                });
-            });
+            services.AddSwaggerExtension();
+            services.AddApiVersioningExtension();
+            services.AddVersionedApiExplorerExtension();
+            //services.AddSwaggerGen(c =>
+            //{
+            //    var xfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xpath = Path.Combine(AppContext.BaseDirectory, xfile);
+            //    c.IncludeXmlComments(xpath);
+            //    c.SwaggerDoc("v1", new OpenApiInfo
+            //    {
+            //        Version = "v1",
+            //        Title = "Kiss - WebApi",
+            //    });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
