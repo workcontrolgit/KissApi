@@ -2,6 +2,9 @@
 {
     public class RequestParameter
     {
+        const int maxPageSize = 200;
+        private int defaultPageSize = 10;
+
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public RequestParameter()
@@ -12,7 +15,9 @@
         public RequestParameter(int pageNumber, int pageSize)
         {
             this.PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            this.PageSize = pageSize > 10 ? 10 : pageSize;
+            this.PageSize = pageSize > maxPageSize ? defaultPageSize : pageSize;
         }
+        public bool IncludeCount { get; set; } = false;
+
     }
 }
