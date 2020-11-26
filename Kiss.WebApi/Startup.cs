@@ -1,14 +1,14 @@
+using AutoWrapper;
+using Kiss.Api.Extensions;
+using Kiss.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Kiss.Infrastructure;
-using System;
+using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using System.Reflection;
-using Kiss.Api.Extensions;
 
 namespace Kiss.WebApi
 {
@@ -29,17 +29,6 @@ namespace Kiss.WebApi
             services.AddSwaggerExtension();
             services.AddApiVersioningExtension();
             services.AddVersionedApiExplorerExtension();
-            //services.AddSwaggerGen(c =>
-            //{
-            //    var xfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //    var xpath = Path.Combine(AppContext.BaseDirectory, xfile);
-            //    c.IncludeXmlComments(xpath);
-            //    c.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Version = "v1",
-            //        Title = "Kiss - WebApi",
-            //    });
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +38,10 @@ namespace Kiss.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //Enable AutoWrapper.Core
+            //More info see: https://github.com/proudmonkey/AutoWrapper
+            app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsDebug = true, UseApiProblemDetailsException = true });
 
             app.UseHttpsRedirection();
 

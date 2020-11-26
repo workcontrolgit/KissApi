@@ -20,9 +20,12 @@ namespace Kiss.Api.Controllers.v1
         {
             this.unitOfWork = unitOfWork;
         }
+
         /// <summary>
         /// SELECT records from mock library GenFu
         /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Person>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)

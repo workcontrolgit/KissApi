@@ -1,38 +1,29 @@
-﻿using Kiss.Application.Interfaces;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Kiss.Infrastructure.Repository
+namespace Kiss.Application.Interfaces.Mock
 {
-    public class GenFuRepository<T> : IGenFuRepository<T>
-        where T : class, new()
+    public interface IGenFuRepository<T> where T : class
     {
         /// <summary>
         /// Generates a collection of type T based on the properties in T
         /// </summary>
         /// <returns>List<T></returns>
-        public async Task<IEnumerable<T>> Collection()
-        {
-            return await Task.Run(() => GenFu.GenFu.ListOf<T>());
-        }
+        Task<IEnumerable<T>> Collection();
 
         /// <summary>
         /// Generates the collection of type T of size = length 
         /// </summary>
         /// <param name="length">The size of the collection to be passed</param>
         /// <returns>A collection of type T based on the length passed</returns>
-        public async Task<IEnumerable<T>> Collection(int length)
-        {
-            return await Task.Run(() => (GenFu.GenFu.ListOf<T>(length)));
-        }
+        Task<IEnumerable<T>> Collection(int length);
 
         /// <summary>
         /// Generates an object of type T with data
         /// </summary>
         /// <returns>T with data based on the properties in T</returns>
-        public async Task<T> Instance()
-        {
-            return await Task.Run(() => GenFu.GenFu.New<T>());
-        }
+        Task<T> Instance();
     }
 }

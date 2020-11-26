@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,7 @@ namespace Kiss.Api.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                var xfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xpath = Path.Combine(AppContext.BaseDirectory, xfile);
-                c.IncludeXmlComments(xpath);
+                c.IncludeXmlComments(XmlCommentsFilePath);
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -26,9 +25,9 @@ namespace Kiss.Api.Extensions
                     Description = "This REST API will be responsible for overall data distribution and authorization.",
                     Contact = new OpenApiContact
                     {
-                        Name = "First Last",
-                        Email = "fist.last@youremailserver.com",
-                        Url = new Uri("https://github.com/workcontrolgit/KissApi"),
+                        Name = "Jane Doe",
+                        Email = "jane.doe@yourdomain.com",
+                        Url = new Uri("https://github.com/workcontrolgit/TemplateKissAPI"),
                     }
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -74,9 +73,22 @@ namespace Kiss.Api.Extensions
         {
             services.AddVersionedApiExplorer(config =>
             {
+                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+                // note: the specified format code will format the version as "'v'major[.minor][-status]"
                 config.GroupNameFormat = "'v'VVV";
+                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+                // can also be used to control the format of the API version in route templates                
                 config.SubstituteApiVersionInUrl = true;
             });
+        }
+        static string XmlCommentsFilePath
+        {
+            get
+            {
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var fileName = typeof(WebApi.Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+                return Path.Combine(basePath, fileName);
+            }
         }
     }
 }

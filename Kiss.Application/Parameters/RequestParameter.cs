@@ -17,7 +17,7 @@
             this.PageNumber = pageNumber < 1 ? 1 : pageNumber;
             this.PageSize = pageSize > maxPageSize ? defaultPageSize : pageSize;
         }
-        public bool IncludeCount { get; set; } = false;
+        // public bool IncludeCount { get; set; } = false;
 
     }
 }
