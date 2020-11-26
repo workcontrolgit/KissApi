@@ -12,7 +12,7 @@ namespace Kiss.Api.Controllers.v1
     [Route("api/[controller]")]
     [ApiVersion("1.0")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;

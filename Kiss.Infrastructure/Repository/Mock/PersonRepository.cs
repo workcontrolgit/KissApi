@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GenFu;
+using Kiss.Application.Interfaces.Mock;
 
-namespace Kiss.Infrastructure.Repository
+namespace Kiss.Infrastructure.Repository.Mock
 {
     public class PersonRepository : IPersonRepository
     {

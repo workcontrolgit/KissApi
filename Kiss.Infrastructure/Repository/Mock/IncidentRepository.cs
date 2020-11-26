@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using GenFu;
 using Bogus;
+using Kiss.Application.Interfaces.Mock;
 
-namespace Kiss.Infrastructure.Repository
+namespace Kiss.Infrastructure.Repository.Mock
 {
     public class IncidentRepository : IIncidentReportRepository
     {

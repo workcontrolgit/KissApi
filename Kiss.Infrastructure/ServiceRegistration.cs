@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Kiss.Application.Constants;
 using SqlKata.Execution;
+using Kiss.Infrastructure.Repository.Mock;
+using Kiss.Application.Interfaces.Mock;
 
 namespace Kiss.Infrastructure
 {
@@ -33,8 +35,6 @@ namespace Kiss.Infrastructure
             });
             //GenFu DI Container https://github.com/MisterJames/GenFu
             services.AddSingleton(typeof(IGenFuRepository<>), typeof(GenFuRepository<>));
-            //Bogus DI Container https://github.com/bchavez/Bogus
-            //services.AddSingleton(typeof(IBogusRepository<>), typeof(BogusRepository<>));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Kiss.Application.Interfaces
+﻿using Kiss.Application.Interfaces.Mock;
+
+namespace Kiss.Application.Interfaces
 {
 
     public interface IUnitOfWork
