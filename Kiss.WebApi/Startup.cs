@@ -39,25 +39,11 @@ namespace Kiss.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            //Enable AutoWrapper.Core
-            //More info see: https://github.com/proudmonkey/AutoWrapper
-            app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsDebug = true, UseApiProblemDetailsException = true });
-
+            app.UseAutoWraperExtension();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-            #region Swagger
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kiss.WebApi");
-            });
-            #endregion
+            app.UseSwaggerExtension();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
