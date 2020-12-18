@@ -17,11 +17,15 @@ namespace Kiss.Infrastructure.Repository.Mock
         {
 
             int mockRowCount = 100;
-            var fakePosition = new Faker<Position>()
-                .RuleFor(c => c.Id, f => Guid.NewGuid())
-                .RuleFor(c => c.FullName, f => f.Name.FullName())
-                .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
-                .RuleFor(c => c.OfficePhone, f => f.Person.Phone);
+            Faker<Position> fakePosition;
+
+            FakeSetup(mockRowCount, out fakePosition);
+
+            //var fakePosition = new Faker<Position>()
+            //    .RuleFor(c => c.Id, f => Guid.NewGuid())
+            //    .RuleFor(c => c.FullName, f => f.Name.FullName())
+            //    .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
+            //    .RuleFor(c => c.OfficePhone, f => f.Person.Phone);
 
             
             var result = await Task.Run(() => fakePosition.Generate(mockRowCount));
@@ -32,29 +36,17 @@ namespace Kiss.Infrastructure.Repository.Mock
         {
             int mockRowCount = 50000;
             int recordCount = default;
+
             IEnumerable<Position> result;
+            Faker<Position> fakePosition;
 
-
-            var fakePosition = new Faker<Position>()
-                .RuleFor(c => c.Id, f => Guid.NewGuid())
-                .RuleFor(c => c.PositionNumber, f => f.Finance.CreditCardNumber())
-                .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
-                .RuleFor(c => c.ReportsToPositionNumber, f => f.Finance.CreditCardNumber())
-                .RuleFor(c => c.FullName, f => f.Name.FullName())
-                .RuleFor(c => c.OfficePhone, f => f.Person.Phone)
-                .RuleFor(c => c.Bureau, f => f.Commerce.Department())
-                .RuleFor(c => c.OrgAbbreviation, f => f.Commerce.Department())
-                .RuleFor(c => c.OrgCode, f => f.Commerce.Department())
-                .RuleFor(c => c.PositionTitle, f => f.Name.JobTitle())
-                .RuleFor(c => c.PositionPayPlan, f => f.Name.JobType())
-                .RuleFor(c => c.PositionGrade, f => f.Name.JobArea())
-                .RuleFor(c => c.PositionSeries, f => f.Name.JobArea())
-                ;
+            FakeSetup(mockRowCount, out fakePosition);
 
             // mock data gen
             result = await Task.Run(() => fakePosition.Generate(mockRowCount));
 
-            ExportJson(result);
+            // save to file
+            ExportToFile(result);
 
 
             // filter
@@ -84,7 +76,25 @@ namespace Kiss.Infrastructure.Repository.Mock
 
         }
 
-        private static void ExportJson(IEnumerable<Position> result)
+        private static void FakeSetup(int mockRowCount, out Faker<Position> fakePosition)
+        {
+            fakePosition = new Faker<Position>()
+                .RuleFor(c => c.Id, f => Guid.NewGuid())
+                .RuleFor(c => c.PositionNumber, f => f.Finance.CreditCardNumber())
+                .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
+                .RuleFor(c => c.ReportsToPositionNumber, f => f.Finance.CreditCardNumber())
+                .RuleFor(c => c.FullName, f => f.Name.FullName())
+                .RuleFor(c => c.OfficePhone, f => f.Person.Phone)
+                .RuleFor(c => c.Bureau, f => f.Commerce.Department())
+                .RuleFor(c => c.OrgAbbreviation, f => f.Commerce.Department())
+                .RuleFor(c => c.OrgCode, f => f.Commerce.Department())
+                .RuleFor(c => c.PositionTitle, f => f.Name.JobTitle())
+                .RuleFor(c => c.PositionPayPlan, f => f.Name.JobType())
+                .RuleFor(c => c.PositionGrade, f => f.Name.JobArea())
+                .RuleFor(c => c.PositionSeries, f => f.Name.JobArea());
+        }
+
+        private static void ExportToFile(IEnumerable<Position> result)
         {
             //serialize to json
             string json = JsonConvert.SerializeObject(result.ToArray(), Formatting.Indented);
