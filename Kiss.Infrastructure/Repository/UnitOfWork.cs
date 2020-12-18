@@ -5,17 +5,21 @@ namespace Kiss.Infrastructure.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IProductRepository productRepository, IPersonRepository personRepository, IIncidentReportRepository incidentReportRepository)
+        public UnitOfWork(IProductRepository productRepository, 
+            IPersonRepository personRepository, 
+            IIncidentReportRepository incidentReportRepository,
+            IPositionRepository positionRepository)
         {
-            Products = productRepository;
-            Persons = personRepository;
+            Product = productRepository;
+            Person = personRepository;
             IncidentReport = incidentReportRepository;
-            
-        }
-        public IProductRepository Products { get; }
+            Position = positionRepository;
 
-        public IPersonRepository Persons { get; }
+        }
+        public IProductRepository Product { get; }
+        public IPersonRepository Person { get; }
         public IIncidentReportRepository IncidentReport { get; }
+        public IPositionRepository Position { get; }
 
 
     }

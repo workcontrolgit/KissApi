@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GenFu;
 using Kiss.Application.Interfaces.Mock;
+using Kiss.Application.Parameters.Mock;
+using Kiss.Application.Parameters;
 
 namespace Kiss.Infrastructure.Repository.Mock
 {
@@ -19,19 +21,65 @@ namespace Kiss.Infrastructure.Repository.Mock
             _personGeneratorService = personGeneratorService;
             _contactGeneratorService = contactGeneratorService;
         }
-        public async Task<IEnumerable<Person>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            var contacts = await _contactGeneratorService.Collection(100);
+            int mockRowCount = 10000;
+            IEnumerable<Person> result;
+            var contacts = await _contactGeneratorService.Collection(mockRowCount);
 
-            //Example of custom data
+            // custom mock data range
             GenFu.GenFu.Configure<Person>()
                 .Fill(p => p.EmergencyContact)
                 .WithRandom(contacts)
                 .Fill(p => p.NumberOfKids)
                 .WithinRange(1, 25);
-            IEnumerable<Person> result = await _personGeneratorService.Collection(100);
-            return result.Skip((pageNumber - 1) * pageSize).Take(pageSize); 
+            result = await _personGeneratorService.Collection(mockRowCount);
+            return result; 
         }
+
+        public async Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameter urlQueryParameters)
+        {
+            int mockRowCount = 10000;
+            int recordCount = default;
+            IEnumerable<Person> result;
+
+            // mock contacts
+            var contacts = await _contactGeneratorService.Collection(100);
+
+            // custom mock data range
+            GenFu.GenFu.Configure<Person>()
+                .Fill(p => p.EmergencyContact)
+                .WithRandom(contacts)
+                .Fill(p => p.NumberOfKids)
+                .WithinRange(1, 25);
+            // mock data gen
+            result = await _personGeneratorService.Collection(mockRowCount);
+            // filter
+            if(!string.IsNullOrEmpty(urlQueryParameters.LastName))
+            {
+                result = result.Where(item => item.LastName == urlQueryParameters.LastName);
+            }
+            // update recordCount before page
+            if (urlQueryParameters.IncludeCount)
+            {
+                recordCount = result.Count();
+            }
+            // page
+            result = result.Skip(urlQueryParameters.PageNumber).Take(urlQueryParameters.PageSize);
+
+
+            var metadata = new Pagination
+            {
+                PageNumber = urlQueryParameters.PageNumber,
+                PageSize = urlQueryParameters.PageSize,
+                TotalRecords = recordCount
+
+            };
+
+            return (result, metadata);
+
+        }
+
 
         public async Task<Person> GetByIdAsync(Guid id)
         {

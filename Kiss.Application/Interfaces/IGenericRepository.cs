@@ -9,7 +9,7 @@ namespace Kiss.Application.Interfaces
     {
         Task<T> GetByIdAsync(Guid id);
 
-        Task<IEnumerable<T>> GetAllAsync(int pageNumber, int pageSize);
+        Task<IEnumerable<T>> GetAllAsync();
 
         Task<Guid> AddAsync(T entity);
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Kiss.Application.Interfaces.Mock
 {
-    public interface IPersonRepository : IGenericRepository<Person>
+    public interface IPositionRepository : IGenericRepository<Position>
     {
-        Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameter urlQueryParameters);
+        Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameter urlQueryParameters);
 
     }
 }

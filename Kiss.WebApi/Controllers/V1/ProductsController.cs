@@ -5,15 +5,14 @@ using Kiss.Core.Entities;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Kiss.Api.Controllers.v1
 {
-    //[Route("api/v1/[controller]")]
-    [Route("api/[controller]")]
     [ApiVersion("1.0")]
-    [ApiController]
     //[Authorize]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -25,9 +24,26 @@ namespace Kiss.Api.Controllers.v1
         /// SELECT records
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllProductsParameter filter)
+        public async Task<IActionResult> GetAll()
         {
-            var data = await unitOfWork.Products.GetAllAsync(filter.PageNumber, filter.PageSize);
+            var data = await unitOfWork.Product.GetAllAsync();
+            return Ok(data);
+        }
+        /// <summary>
+        /// Page records
+        /// </summary>
+        /// <param name="urlQueryParameters"></param>
+        /// <returns></returns>
+        [Route("paged")]
+        [HttpGet]
+        public async Task<IActionResult> GetPaged([FromQuery] GetAllProductsParameter urlQueryParameters)
+        {
+            var result = await unitOfWork.Product.GetPagedAsync(urlQueryParameters);
+            var data = result.Data;
+            var pagination = result.Pagination;
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
+
             return Ok(data);
         }
         /// <summary>
@@ -37,7 +53,7 @@ namespace Kiss.Api.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var data = await unitOfWork.Products.GetByIdAsync(id);
+            var data = await unitOfWork.Product.GetByIdAsync(id);
             if (data == null) return Ok();
             return Ok(data);
         }
@@ -48,7 +64,7 @@ namespace Kiss.Api.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> Add(Product product)
         {
-            var data = await unitOfWork.Products.AddAsync(product);
+            var data = await unitOfWork.Product.AddAsync(product);
             return Ok(data);
         }
         /// <summary>
@@ -58,7 +74,7 @@ namespace Kiss.Api.Controllers.v1
         [HttpPut]
         public async Task<IActionResult> Update(Product product)
         {
-            var data = await unitOfWork.Products.UpdateAsync(product);
+            var data = await unitOfWork.Product.UpdateAsync(product);
             return Ok(data);
         }
         /// <summary>
@@ -68,7 +84,7 @@ namespace Kiss.Api.Controllers.v1
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var data = await unitOfWork.Products.DeleteAsync(id);
+            var data = await unitOfWork.Product.DeleteAsync(id);
             return Ok(data);
         }
     }

@@ -1,24 +1,32 @@
-﻿using Kiss.Application.Interfaces;
+﻿using GenFu;
+using Kiss.Application.Interfaces;
+using Kiss.Application.Interfaces.Mock;
+using Kiss.Application.Parameters;
 using Kiss.Core.Entities;
+using SqlKata;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Kiss.Infrastructure.Repository
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly IGenFuRepository<Product> _productGeneratorService;
         private readonly QueryFactory _queryFactory;
 
-        public ProductRepository(QueryFactory queryFactory)
+
+        public ProductRepository(IGenFuRepository<Product> productGeneratorService, QueryFactory queryFactory)
         {
+            _productGeneratorService = productGeneratorService;
             _queryFactory = queryFactory;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            var result = await _queryFactory.Query("Products").ForPage(pageNumber, pageSize).GetAsync<Product>();
+            var result = await _queryFactory.Query("Products").GetAsync<Product>();
             return result;
 
         }
@@ -29,14 +37,47 @@ namespace Kiss.Infrastructure.Repository
                 .FirstOrDefaultAsync<Product>();
             return result;
         }
+        public async Task<(IEnumerable<Product> Data, Pagination Pagination)> GetPagedAsync(GetAllProductsParameter urlQueryParameters)
+        {
+            IEnumerable<Product> result;
+            int recordCount =  default;
 
+
+            result = await _queryFactory.Query("Products").Where("Name", urlQueryParameters.Name).ForPage(urlQueryParameters.PageNumber, urlQueryParameters.PageSize).GetAsync<Product>();
+
+
+            if (urlQueryParameters.IncludeCount)
+            {
+                // SQLKata count https://sqlkata.com/docs/select
+                var countQuery = await _queryFactory.Query("Products").Where("Name", urlQueryParameters.Name).AsCount().FirstOrDefaultAsync();
+                recordCount = countQuery.count;
+
+                //dynamic row = await _queryFactory.Query("Products").Where("Name", urlQueryParameters.Name).AsCount().FirstOrDefaultAsync();
+                //int myValue = countQuery.count;
+                // Dapper: How to get value from DapperRow if column name is “count(*)”?
+                // https://stackoverflow.com/questions/25263701/dapper-how-to-get-value-from-dapperrow-if-column-name-is-count
+                //var data = (IDictionary<string, object>)countQuery;
+                //object value = data["count"];
+                //recordCount = Convert.ToInt32(value);
+            }
+
+            var metadata = new Pagination
+            {
+                PageNumber = urlQueryParameters.PageNumber,
+                PageSize = urlQueryParameters.PageSize,
+                TotalRecords = recordCount
+
+            };
+
+            return (result, metadata);
+
+        }
 
         public async Task<Guid> AddAsync(Product entity)
         {
             entity.AddedOn = DateTime.Now;
             entity.Id = await SetPrimaryKey(entity.Id);
-
-            var affectedRows = await _queryFactory.Query("Products").InsertAsync(new
+            int affectedRows = await _queryFactory.Query("Products").InsertAsync(new
             {
                 Id = entity.Id,
                 Name = entity.Name,
@@ -49,10 +90,30 @@ namespace Kiss.Infrastructure.Repository
             if (affectedRows != 1)
                 // insert failed, return Guid structure all zero (0).  Front end should check status for empty Guid
                 return Guid.Empty;
-            
+
+            // await SeedData();
+
             //return Guid of new insert row
             return entity.Id;
 
+        }
+
+        private async Task SeedData()
+        {
+            var products = await _productGeneratorService.Collection(100);
+
+            foreach (var product in products)
+            {
+                await _queryFactory.Query("Products").InsertAsync(new
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Barcode = product.Barcode,
+                    Rate = product.Rate,
+                    AddedOn = product.AddedOn
+                });
+            }
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -94,7 +155,7 @@ namespace Kiss.Infrastructure.Repository
 
             if (isGuid)
             {
-                //use provided key if it has has not been used.
+                //use provided key if it has not been used.
                 if (!await IsUsedPrimaryKey(Id))
                 {
                     // change defaultKey to provided Id
@@ -110,7 +171,7 @@ namespace Kiss.Infrastructure.Repository
         /// </summary>
         private async Task<bool> IsUsedPrimaryKey(Guid Id)
         {
-            var result = await _queryFactory.Query("Products").Where("Id", "=", Id)
+            var result = await _queryFactory.Query("Products").Where("Id", Id)
                 .FirstOrDefaultAsync<Product>();
 
             return result != null;

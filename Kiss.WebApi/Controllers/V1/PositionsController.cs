@@ -11,11 +11,11 @@ using System.Text.Json;
 namespace Kiss.Api.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class PersonsController : BaseApiController
+    public class PositionsController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
 
-        public PersonsController(IUnitOfWork unitOfWork)
+        public PositionsController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -25,11 +25,10 @@ namespace Kiss.Api.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Person>), StatusCodes.Status200OK)]
-        //public async Task<IActionResult> GetAll([FromQuery] QueryStringParameters filter)
+        [ProducesResponseType(typeof(IEnumerable<Position>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var data = await unitOfWork.Person.GetAllAsync();
+            var data = await unitOfWork.Position.GetAllAsync();
             return Ok(data);
         }
         /// <summary>
@@ -39,9 +38,9 @@ namespace Kiss.Api.Controllers.v1
         /// <returns></returns>
         [Route("paged")]
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] GetAllPersonsParameter urlQueryParameters)
+        public async Task<IActionResult> GetPaged([FromQuery] GetAllPositionsParameter urlQueryParameters)
         {
-            var result = await unitOfWork.Person.GetPagedAsync(urlQueryParameters);
+            var result = await unitOfWork.Position.GetPagedAsync(urlQueryParameters);
             var data = result.Data;
             var pagination = result.Pagination;
 

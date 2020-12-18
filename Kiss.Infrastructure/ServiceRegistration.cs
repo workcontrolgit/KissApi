@@ -19,8 +19,9 @@ namespace Kiss.Infrastructure
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IPersonRepository, PersonRepository>();
             services.AddTransient<IIncidentReportRepository, IncidentRepository>();
+            services.AddTransient<IPositionRepository, PositionRepository>();
 
-            
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             //SQLKata DI Container https://sqlkata.com/docs/
@@ -30,7 +31,7 @@ namespace Kiss.Infrastructure
                 {
                     Compiler = new SqlServerCompiler(),
                     Connection = new SqlConnection(configuration[ConfigurationConstants.ConnectionString]),
-                    Logger = compiled => Console.WriteLine(compiled)
+                    Logger = compiled => System.Diagnostics.Debug.WriteLine(compiled)
                 };
             });
             //GenFu DI Container https://github.com/MisterJames/GenFu

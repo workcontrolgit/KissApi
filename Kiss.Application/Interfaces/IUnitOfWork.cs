@@ -5,10 +5,11 @@ namespace Kiss.Application.Interfaces
 
     public interface IUnitOfWork
     {
-        IProductRepository Products { get; }
-        IPersonRepository Persons { get; }
+        IProductRepository Product { get; }
+        IPersonRepository Person { get; }
         IIncidentReportRepository IncidentReport { get; }
+        IPositionRepository Position { get; }
 
-        
+
     }
 }

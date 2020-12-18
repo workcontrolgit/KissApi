@@ -12,7 +12,7 @@ namespace Kiss.Infrastructure.Repository.Mock
 {
     public class IncidentRepository : IIncidentReportRepository
     {
-        public async Task<IEnumerable<Incident>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Incident>> GetAllAsync()
         {
 
             var fakeContact = new Faker<Contact>()
@@ -29,9 +29,9 @@ namespace Kiss.Infrastructure.Repository.Mock
                 .RuleFor(o => o.ReportedOn, f => f.Date.Past())
                 .RuleFor(o => o.ReportedBy, f => fakeContact.Generate());
             
-            var result = await Task.Run(() => fakeIncidentReport.Generate(100));
+            var result = await Task.Run(() => fakeIncidentReport.Generate(50000));
 
-            return result.Skip((pageNumber - 1) * pageSize).Take(pageSize); 
+            return result; 
         }
 
         public async Task<Incident> GetByIdAsync(Guid id)

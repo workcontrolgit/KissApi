@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Kiss.Application.Interfaces;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace Kiss.Api.Controllers.v1
 {
-    //    [Route("api/v1/[controller]")]
-    [Route("api/[controller]")]
     [ApiVersion("1.0")]
-    [ApiController]
-    public class IncidentsController : ControllerBase
+    public class IncidentsController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -20,9 +19,10 @@ namespace Kiss.Api.Controllers.v1
         /// SELECT records from mock library Bogus
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAll()
         {
-            var data = await unitOfWork.IncidentReport.GetAllAsync(pageNumber, pageSize);
+            var data = await unitOfWork.IncidentReport.GetAllAsync();
+
             return Ok(data);
         }
     }
