@@ -8,7 +8,7 @@ namespace Kiss.Application.Interfaces.Mock
 {
     public interface IPersonRepository : IGenericRepository<Person>
     {
-        Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameter urlQueryParameters);
+        Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameters urlQueryParameters);
 
     }
 }

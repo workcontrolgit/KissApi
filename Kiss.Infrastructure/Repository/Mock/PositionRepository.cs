@@ -20,19 +20,12 @@ namespace Kiss.Infrastructure.Repository.Mock
             Faker<Position> fakePosition;
 
             FakeSetup(mockRowCount, out fakePosition);
-
-            //var fakePosition = new Faker<Position>()
-            //    .RuleFor(c => c.Id, f => Guid.NewGuid())
-            //    .RuleFor(c => c.FullName, f => f.Name.FullName())
-            //    .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
-            //    .RuleFor(c => c.OfficePhone, f => f.Person.Phone);
-
-            
+           
             var result = await Task.Run(() => fakePosition.Generate(mockRowCount));
 
             return result; 
         }
-        public async Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameter urlQueryParameters)
+        public async Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameters urlQueryParameters)
         {
             int mockRowCount = 50000;
             int recordCount = default;
@@ -76,7 +69,7 @@ namespace Kiss.Infrastructure.Repository.Mock
 
         }
 
-        private static void FakeSetup(int mockRowCount, out Faker<Position> fakePosition)
+        public static void FakeSetup(int mockRowCount, out Faker<Position> fakePosition)
         {
             fakePosition = new Faker<Position>()
                 .RuleFor(c => c.Id, f => Guid.NewGuid())

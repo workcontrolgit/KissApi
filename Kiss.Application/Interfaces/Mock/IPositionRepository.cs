@@ -8,7 +8,7 @@ namespace Kiss.Application.Interfaces.Mock
 {
     public interface IPositionRepository : IGenericRepository<Position>
     {
-        Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameter urlQueryParameters);
+        Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameters urlQueryParameters);
 
     }
 }

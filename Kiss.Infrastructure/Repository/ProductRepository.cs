@@ -37,7 +37,7 @@ namespace Kiss.Infrastructure.Repository
                 .FirstOrDefaultAsync<Product>();
             return result;
         }
-        public async Task<(IEnumerable<Product> Data, Pagination Pagination)> GetPagedAsync(GetAllProductsParameter urlQueryParameters)
+        public async Task<(IEnumerable<Product> Data, Pagination Pagination)> GetPagedAsync(GetAllProductsParameters urlQueryParameters)
         {
             IEnumerable<Product> result;
             int recordCount =  default;

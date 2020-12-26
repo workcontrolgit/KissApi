@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Kiss.Application.Parameters.Mock
 {
-    public class GetAllPositionsParameter : QueryStringParameters
+    public class GetAllPositionsParameters : QueryStringParameters
     {
         public string OrgCode { get; set; }
     }

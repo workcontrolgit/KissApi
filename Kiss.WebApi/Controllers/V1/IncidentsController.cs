@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Kiss.Application.Interfaces;
+﻿using Kiss.Application.Interfaces;
+using Kiss.Application.Parameters.Mock;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Linq;
 
 namespace Kiss.Api.Controllers.v1
 {
@@ -25,5 +25,18 @@ namespace Kiss.Api.Controllers.v1
 
             return Ok(data);
         }
+        [Route("paged")]
+        [HttpGet]
+        public async Task<IActionResult> GetPaged([FromQuery] GetAllIncidentsParameters urlQueryParameters)
+        {
+            var result = await unitOfWork.IncidentReport.GetPagedAsync(urlQueryParameters);
+            var data = result.Data;
+            var pagination = result.Pagination;
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
+
+            return Ok(data);
+        }
+
     }
 }

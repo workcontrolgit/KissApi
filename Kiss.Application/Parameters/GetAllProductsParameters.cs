@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Kiss.Application.Parameters
 {
-    public class GetAllProductsParameter : QueryStringParameters
+    public class GetAllProductsParameters : QueryStringParameters
     {
         public string Name { get; set; }
     }

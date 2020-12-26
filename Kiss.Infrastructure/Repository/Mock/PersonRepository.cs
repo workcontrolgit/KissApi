@@ -23,7 +23,7 @@ namespace Kiss.Infrastructure.Repository.Mock
         }
         public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            int mockRowCount = 10000;
+            int mockRowCount = 100;
             IEnumerable<Person> result;
             var contacts = await _contactGeneratorService.Collection(mockRowCount);
 
@@ -37,14 +37,14 @@ namespace Kiss.Infrastructure.Repository.Mock
             return result; 
         }
 
-        public async Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameter urlQueryParameters)
+        public async Task<(IEnumerable<Person> Data, Pagination Pagination)> GetPagedAsync(GetAllPersonsParameters urlQueryParameters)
         {
-            int mockRowCount = 10000;
+            int mockRowCount = 100;
             int recordCount = default;
             IEnumerable<Person> result;
 
             // mock contacts
-            var contacts = await _contactGeneratorService.Collection(100);
+            var contacts = await _contactGeneratorService.Collection(mockRowCount);
 
             // custom mock data range
             GenFu.GenFu.Configure<Person>()

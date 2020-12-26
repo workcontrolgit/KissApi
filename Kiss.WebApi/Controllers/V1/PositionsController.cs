@@ -38,7 +38,7 @@ namespace Kiss.Api.Controllers.v1
         /// <returns></returns>
         [Route("paged")]
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] GetAllPositionsParameter urlQueryParameters)
+        public async Task<IActionResult> GetPaged([FromQuery] GetAllPositionsParameters urlQueryParameters)
         {
             var result = await unitOfWork.Position.GetPagedAsync(urlQueryParameters);
             var data = result.Data;
