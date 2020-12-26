@@ -21,7 +21,7 @@ namespace Kiss.Api.Controllers.v1
         }
 
         /// <summary>
-        /// SELECT records from mock library GenFu
+        /// SELECT records from mock library Bogus
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -32,7 +32,7 @@ namespace Kiss.Api.Controllers.v1
             return Ok(data);
         }
         /// <summary>
-        /// Page records from mock library GenFu
+        /// SELECT records from mock library Bogus
         /// </summary>
         /// <param name="urlQueryParameters"></param>
         /// <returns></returns>

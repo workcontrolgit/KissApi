@@ -71,6 +71,7 @@ namespace Kiss.Infrastructure.Repository.Mock
 
         public static void FakeSetup(int mockRowCount, out Faker<Position> fakePosition)
         {
+            Randomizer.Seed = new Random(1338);
             fakePosition = new Faker<Position>()
                 .RuleFor(c => c.Id, f => Guid.NewGuid())
                 .RuleFor(c => c.PositionNumber, f => f.Finance.CreditCardNumber())

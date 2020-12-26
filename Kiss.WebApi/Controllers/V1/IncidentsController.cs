@@ -25,6 +25,9 @@ namespace Kiss.Api.Controllers.v1
 
             return Ok(data);
         }
+        /// <summary>
+        /// SELECT records from mock library Bogus
+        /// </summary>
         [Route("paged")]
         [HttpGet]
         public async Task<IActionResult> GetPaged([FromQuery] GetAllIncidentsParameters urlQueryParameters)
