@@ -16,18 +16,25 @@ namespace Kiss.Infrastructure.Repository.Mock
         public async Task<IEnumerable<Position>> GetAllAsync()
         {
 
-            int mockRowCount = 100;
+            int mockRowCount = 40000;
+            //int mockRowCount = 400;
             Faker<Position> fakePosition;
 
             FakeSetup(mockRowCount, out fakePosition);
            
             var result = await Task.Run(() => fakePosition.Generate(mockRowCount));
 
+            // save to file
+            CustomExportToFile(result);
+
+
+
             return result; 
         }
         public async Task<(IEnumerable<Position> Data, Pagination Pagination)> GetPagedAsync(GetAllPositionsParameters urlQueryParameters)
         {
-            int mockRowCount = 50000;
+            int mockRowCount = 40000;
+            //int mockRowCount = 400;
             int recordCount = default;
 
             IEnumerable<Position> result;
@@ -72,20 +79,23 @@ namespace Kiss.Infrastructure.Repository.Mock
         public static void FakeSetup(int mockRowCount, out Faker<Position> fakePosition)
         {
             Randomizer.Seed = new Random(1338);
+            var PositionTypes = new[] {"D", "S", "X"};
+            var PayPayPlans = new[] {"GS", "GM", "GL", "GP", "EX"};
+            var PayGrades = new[] {"05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15"};
+            var Series = new[] { "0000", "1000", "2000", "3000", "4000", "5000", "6000", "7000", "8000", "9000"};
             fakePosition = new Faker<Position>()
-                .RuleFor(c => c.Id, f => Guid.NewGuid())
-                .RuleFor(c => c.PositionNumber, f => f.Finance.CreditCardNumber())
-                .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
-                .RuleFor(c => c.ReportsToPositionNumber, f => f.Finance.CreditCardNumber())
+                .RuleFor(c => c.PositionNumber, f => f.PickRandom(PositionTypes) + f.Random.Long(1000000, 9999999).ToString())
                 .RuleFor(c => c.FullName, f => f.Name.FullName())
+                .RuleFor(c => c.Email, (f, u) => f.Internet.Email(u.FullName))
+                .RuleFor(c => c.ReportsToPositionNumber, f => f.PickRandom(PositionTypes) + f.Random.Long(1000000, 9999999).ToString())
                 .RuleFor(c => c.OfficePhone, f => f.Person.Phone)
                 .RuleFor(c => c.Bureau, f => f.Commerce.Department())
                 .RuleFor(c => c.OrgAbbreviation, f => f.Commerce.Department())
-                .RuleFor(c => c.OrgCode, f => f.Commerce.Department())
+                .RuleFor(c => c.OrgCode, f => f.Random.Long(100000, 999999).ToString())
                 .RuleFor(c => c.PositionTitle, f => f.Name.JobTitle())
-                .RuleFor(c => c.PositionPayPlan, f => f.Name.JobType())
-                .RuleFor(c => c.PositionGrade, f => f.Name.JobArea())
-                .RuleFor(c => c.PositionSeries, f => f.Name.JobArea());
+                .RuleFor(c => c.PositionPayPlan, f => f.PickRandom(PayPayPlans))
+                .RuleFor(c => c.PositionGrade, f => f.PickRandom(PayGrades))
+                .RuleFor(c => c.PositionSeries, f => f.PickRandom(Series));
         }
 
         private static void ExportToFile(IEnumerable<Position> result)
@@ -93,8 +103,85 @@ namespace Kiss.Infrastructure.Repository.Mock
             //serialize to json
             string json = JsonConvert.SerializeObject(result.ToArray(), Formatting.Indented);
             //write string to file
-            System.IO.File.WriteAllText(@"c:\temp\jsonFile.json", json);
+            System.IO.File.WriteAllText(@"c:\temp\OrgPositionExport.json", json);
         }
+
+        private static void CustomExportToFile(IEnumerable<Position> result)
+        {
+            List<PositionExport> customResult = new List<PositionExport>();
+            foreach (var position in result)
+            {
+                var obj = new PositionExport
+                {
+                    PositionNumber = new PositionNumber
+                    {
+                        value = position.PositionNumber,
+                        name = "Position Number"
+                    },
+                    Email = new Email
+                    {
+                        value = position.Email,
+                        name = "Email"
+                    },
+                    ReportsToPositionNumber = new ReportsToPositionNumber
+                    {
+                        value = position.ReportsToPositionNumber,
+                        name = "Reports To Position Number"
+                    },
+                    FullName = new FullName
+                    {
+                        value = position.FullName,
+                        name = "Full Name"
+                    },
+                    OfficePhone = new OfficePhone
+                    {
+                        value = position.OfficePhone,
+                        name = "Office Phone"
+                    },
+                    Bureau = new Bureau
+                    {
+                        value = position.Bureau,
+                        name = "Bureau"
+                    },
+                    OrgAbbreviation = new OrgAbbreviation
+                    {
+                        value = position.OrgAbbreviation,
+                        name = "Org Abbreviation"
+                    },
+                    OrgCode = new OrgCode
+                    {
+                        value = position.OrgCode,
+                        name = "Org Code"
+                    },
+                    PositionTitle = new PositionTitle
+                    {
+                        value = position.PositionTitle,
+                        name = "Position Title"
+                    },
+                    PositionPayPlan = new PositionPayPlan
+                    {
+                        value = position.PositionPayPlan,
+                        name = "Position Pay Plan"
+                    },
+                    PositionGrade = new PositionGrade
+                    {
+                        value = position.PositionGrade,
+                        name = "Position Grade"
+                    },
+                    PositionSeries = new PositionSeries
+                    {
+                        value = position.PositionSeries,
+                        name = "Position Series"
+                    },
+                };
+                customResult.Add(obj);
+            }
+            //serialize to json
+            string json = JsonConvert.SerializeObject(customResult.ToArray(), Formatting.Indented);
+            //write string to file
+            System.IO.File.WriteAllText(@"c:\temp\OrgPositionCustomExport.json", json);
+        }
+
 
         public async Task<Position> GetByIdAsync(Guid id)
         {
